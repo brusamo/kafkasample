@@ -26,7 +26,7 @@ import tech.jhipster.config.h2.H2ConfigurationHelper;
 @Configuration
 public class WebConfigurer implements ServletContextInitializer {
 
-    private final Logger log = LoggerFactory.getLogger(WebConfigurer.class);
+    private final Logger log = LoggerFactory.getLogger(WebConfigurer.class, KafkaStoreAlertConsumer.class);
 
     private final Environment env;
 
