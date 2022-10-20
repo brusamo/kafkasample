@@ -28,6 +28,8 @@ public class StoreResource {
     private final Logger log = LoggerFactory.getLogger(StoreResource.class);
 
     private static final String ENTITY_NAME = "storeStore";
+    private final StoreRepository storeRepository;
+    private final AlertService alertService;
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
@@ -37,7 +39,10 @@ public class StoreResource {
     public StoreResource(StoreRepository storeRepository) {
         this.storeRepository = storeRepository;
     }
-
+    public StoreResource(StoreRepository storeRepository, AlertService alertService) {
+        this.storeRepository = storeRepository;
+        this.alertService = alertService;
+    }
     /**
      * {@code POST  /stores} : Create a new store.
      *
@@ -86,6 +91,9 @@ public class StoreResource {
         }
 
         Store result = storeRepository.save(store);
+        log.debug("SEND store alert for Store: {}", store);
+        alertService.alertStoreStatus(result);       
+        
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, store.getId()))
